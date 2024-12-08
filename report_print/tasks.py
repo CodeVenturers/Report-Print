@@ -6,5 +6,5 @@ def convert_to_float_literal(time_str):
 		return 0.0
 	hours, minutes = time_str.split(":")
 	return float(f"{hours}.{minutes}")
-
+	print(hello)
 print(convert_to_float_literal("8:59"))
