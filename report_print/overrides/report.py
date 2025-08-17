@@ -24,7 +24,7 @@ def get_script(report_name):
 
 	report_override_js = frappe.get_hooks("report_override_js", {})
 	if report_override_js.get(report_name):
-		script_path = os.path.join(frappe.get_app_path("swarnam"), report_override_js.get(report_name)[0])
+		script_path = os.path.join(frappe.get_app_path("test"), report_override_js.get(report_name)[0])
 	else:
 		script_path = report_folder and os.path.join(report_folder, scrub(report.name) + ".js")
 
