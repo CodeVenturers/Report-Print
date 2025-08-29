@@ -13,7 +13,7 @@
   "default",
   "section_break_6",
   "html",
-  "css_section",
+  "section_break_pbgd",
   "css"
  ],
  "fields": [
@@ -50,29 +50,28 @@
    "options": "Jinja"
   },
   {
-   "depends_on": "eval:!doc.raw_printing",
-   "fieldname": "css_section",
-   "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "css",
-   "fieldtype": "Code",
-   "label": "Custom CSS",
-   "options": "CSS"
-  },
-  {
    "default": "0",
    "fieldname": "default",
    "fieldtype": "Check",
    "label": "Default",
    "no_copy": 1,
    "read_only": 1
+  },
+  {
+   "fieldname": "section_break_pbgd",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "css",
+   "fieldtype": "Code",
+   "label": "CSS",
+   "options": "CSS"
   }
  ],
  "icon": "fa fa-print",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-08-31 11:55:05.658178",
+ "modified": "2025-08-30 00:29:50.389432",
  "modified_by": "Administrator",
  "module": "Report Print",
  "name": "Report Print Format",

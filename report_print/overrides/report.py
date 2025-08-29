@@ -10,7 +10,6 @@ from frappe.model.utils import render_include
 from frappe.utils import get_html_format
 
 
-
 @frappe.whitelist()
 def get_script(report_name):
 	report = get_report_doc(report_name)
@@ -21,23 +20,20 @@ def get_script(report_name):
 	# custom modules are virtual modules those exists in DB but not in disk.
 	module_path = "" if is_custom_module else get_module_path(module)
 	report_folder = module_path and os.path.join(module_path, "report", scrub(report.name))
-
-	report_override_js = frappe.get_hooks("report_override_js", {})
-	if report_override_js.get(report_name):
-		script_path = os.path.join(frappe.get_app_path("test"), report_override_js.get(report_name)[0])
-	else:
-		script_path = report_folder and os.path.join(report_folder, scrub(report.name) + ".js")
+	script_path = report_folder and os.path.join(report_folder, scrub(report.name) + ".js")
+	print_path = report_folder and os.path.join(report_folder, scrub(report.name) + ".html")
 
 	script = None
 	if os.path.exists(script_path):
 		with open(script_path) as f:
 			script = f.read()
 			script += f"\n\n//# sourceURL={scrub(report.name)}.js"
-
+	
 	if report_print := frappe.db.get_value(
-		"Report Print Format", {"default": 1, "report": report.name, "disabled": 0}, "html"
+		"Report Print Format", {"default": 1, "report": report.name, "disabled": 0}, ["html", "css"]
 	):
-		html_format = report_print
+		html, css = report_print
+		html_format = f"<style>{css}</style>\n{html}"
 	else:
 		print_path = report_folder and os.path.join(
 			report_folder, scrub(report.name) + ".html"
@@ -54,7 +50,7 @@ def get_script(report_name):
 	return {
 		"script": render_include(script),
 		"html_format": html_format,
-		"execution_time": 0,
+		"execution_time": frappe.cache.hget("report_execution_time", report_name) or 0,
 		"filters": report.filters,
 		"custom_report_name": report.name if report.get("is_custom_report") else None,
 	}
